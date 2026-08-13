@@ -32,12 +32,13 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     background: var(--cream);
     color: var(--text);
     display: flex;
     min-height: 100vh;
     transition: background .3s, color .3s;
+    overflow-x: hidden;
   }
 
   /* ─── SIDEBAR ─────────────────────────────── */
@@ -50,7 +51,7 @@
     height: 100vh;
     overflow-y: auto;
     z-index: 100;
-    transition: transform .3s;
+    transition: transform .3s ease-in-out;
     display: flex;
     flex-direction: column;
   }
@@ -62,48 +63,48 @@
     text-align: center;
   }
   .sidebar-brand .logo-wrap {
-    width: 64px; height: 64px;
+    width: 60px; height: 60px;
     background: #fff;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     margin: 0 auto 10px;
     box-shadow: 0 4px 12px rgba(0,0,0,.3);
-    font-size: 28px;
+    font-size: 24px;
   }
-  .sidebar-brand h2 { font-size: 15px; font-weight: 800; letter-spacing: .5px; }
-  .sidebar-brand p { font-size: 11px; color: rgba(255,255,255,.6); margin-top: 3px; }
+  .sidebar-brand h2 { font-size: 16px; font-weight: 800; letter-spacing: .5px; }
+  .sidebar-brand p { font-size: 11px; color: rgba(255,255,255,.7); margin-top: 4px; }
   .sidebar-nav { padding: 16px 0; flex: 1; }
   .nav-section {
     font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    color: rgba(255,255,255,.4);
+    color: rgba(255,255,255,.5);
     padding: 14px 20px 6px;
   }
   .nav-link {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 9px 20px;
-    color: rgba(255,255,255,.78);
+    gap: 12px;
+    padding: 10px 20px;
+    color: rgba(255,255,255,.8);
     text-decoration: none;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
-    transition: background .2s, color .2s, border-left .2s;
+    transition: all .2s;
     border-left: 3px solid transparent;
   }
   .nav-link:hover, .nav-link.active {
-    background: rgba(255,255,255,.08);
+    background: rgba(255,255,255,.1);
     color: #fff;
     border-left-color: var(--green-acc);
   }
-  .nav-link .icon { font-size: 15px; width: 20px; text-align: center; }
+  .nav-link .icon { font-size: 16px; width: 20px; text-align: center; }
   .sidebar-footer {
     padding: 16px 20px;
     font-size: 11px;
-    color: rgba(255,255,255,.35);
-    border-top: 1px solid rgba(255,255,255,.08);
+    color: rgba(255,255,255,.4);
+    border-top: 1px solid rgba(255,255,255,.1);
     text-align: center;
   }
 
@@ -112,13 +113,16 @@
     margin-left: var(--sidebar-w);
     flex: 1;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - var(--sidebar-w));
   }
 
   /* ─── TOPBAR ─────────────────────────────── */
   #topbar {
     background: var(--white);
     border-bottom: 1px solid var(--border);
-    padding: 14px 36px;
+    padding: 12px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -127,14 +131,14 @@
     z-index: 50;
     box-shadow: var(--shadow);
   }
-  #topbar .breadcrumb { font-size: 13px; color: var(--text-muted); }
+  #topbar .breadcrumb { font-size: 14px; color: var(--text-muted); }
   #topbar .breadcrumb b { color: var(--text); }
   .topbar-actions { display: flex; gap: 10px; align-items: center; }
   .btn-icon {
     border: none;
     background: var(--cream2);
     color: var(--text);
-    width: 36px; height: 36px;
+    width: 38px; height: 38px;
     border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
@@ -149,21 +153,30 @@
     padding: 8px 16px;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
-    display: flex; align-items: center; gap: 6px;
+    display: flex; align-items: center; gap: 8px;
     transition: background .2s;
   }
   .btn-print:hover { background: var(--green-light); }
 
   /* ─── CONTENT ─────────────────────────────── */
-  #content { padding: 40px 40px 80px; max-width: 900px; }
+  #content-wrapper {
+    padding: 32px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  #content { 
+    width: 100%;
+    max-width: 900px; /* Centered content max width */
+  }
 
   /* Cover */
   .cover {
     background: linear-gradient(135deg, var(--green-dark) 0%, #0f2918 50%, #1a3d28 100%);
     border-radius: 16px;
-    padding: 60px 50px;
+    padding: 64px;
     color: #fff;
     margin-bottom: 48px;
     position: relative;
@@ -179,89 +192,90 @@
     pointer-events: none;
   }
   .cover .version-badge {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     background: rgba(63,185,80,.2);
     border: 1px solid var(--green-acc);
     color: var(--green-acc);
     font-size: 12px;
     font-weight: 700;
-    padding: 4px 12px;
+    padding: 6px 14px;
     border-radius: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     letter-spacing: .5px;
   }
   .cover h1 {
-    font-size: 36px;
+    font-size: 42px;
     font-weight: 900;
     line-height: 1.2;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
-  .cover p { font-size: 16px; color: rgba(255,255,255,.7); line-height: 1.7; max-width: 520px; }
+  .cover p { font-size: 16px; color: rgba(255,255,255,.8); line-height: 1.7; max-width: 600px; }
   .cover .meta {
-    margin-top: 32px;
+    margin-top: 40px;
     display: flex;
     gap: 32px;
     flex-wrap: wrap;
   }
-  .cover .meta-item { font-size: 13px; }
-  .cover .meta-item strong { display: block; color: rgba(255,255,255,.5); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .cover .meta-item { font-size: 14px; }
+  .cover .meta-item strong { display: block; color: rgba(255,255,255,.5); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
 
   /* Sections */
-  .section { margin-bottom: 56px; scroll-margin-top: 80px; }
+  .section { margin-bottom: 64px; scroll-margin-top: 90px; }
   .section-title {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
     margin-bottom: 24px;
-    padding-bottom: 14px;
-    border-bottom: 2px solid var(--green-acc);
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
   }
   .section-title .icon-wrap {
-    width: 42px; height: 42px;
+    width: 48px; height: 48px;
     background: var(--green-mid);
-    border-radius: 10px;
+    border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
+    font-size: 24px;
     color: #fff;
     flex-shrink: 0;
   }
-  .section-title h2 { font-size: 22px; font-weight: 800; color: var(--text); }
+  .section-title h2 { font-size: 24px; font-weight: 800; color: var(--text); }
   .section-title .badge {
     margin-left: auto;
     background: var(--green-light);
     color: #fff;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
-    padding: 3px 10px;
+    padding: 4px 12px;
     border-radius: 20px;
   }
 
   h3.subsection {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--green-mid);
-    margin: 28px 0 12px;
+    margin: 32px 0 16px;
     display: flex; align-items: center; gap: 8px;
   }
   body.dark h3.subsection { color: var(--green-acc); }
   h3.subsection::before {
     content: '';
-    width: 4px; height: 18px;
+    width: 4px; height: 20px;
     background: var(--green-acc);
     border-radius: 2px;
     display: inline-block;
   }
 
-  p { font-size: 14px; line-height: 1.8; color: var(--text-muted); margin-bottom: 12px; }
-  b, strong { color: var(--text); }
+  p { font-size: 15px; line-height: 1.7; color: var(--text-muted); margin-bottom: 16px; }
+  b, strong { color: var(--text); font-weight: 600; }
 
   /* Cards */
   .card {
     background: var(--white);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 20px 24px;
-    margin-bottom: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
     box-shadow: var(--shadow);
   }
 
@@ -269,97 +283,97 @@
   .role-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 14px;
-    margin-bottom: 16px;
+    gap: 16px;
+    margin-bottom: 24px;
   }
   .role-card {
     background: var(--white);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 18px;
+    padding: 20px;
     text-align: center;
     transition: transform .2s, box-shadow .2s;
     cursor: default;
+    box-shadow: var(--shadow);
   }
-  .role-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,.12); }
-  .role-card .emoji { font-size: 32px; margin-bottom: 10px; }
-  .role-card .role-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-  .role-card .role-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+  .role-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+  .role-card .emoji { font-size: 36px; margin-bottom: 12px; }
+  .role-card .role-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .role-card .role-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
   .role-card .role-badge {
     display: inline-block;
-    margin-top: 8px;
-    font-size: 10px;
+    margin-top: 12px;
+    font-size: 11px;
     font-weight: 700;
-    padding: 2px 8px;
+    padding: 4px 10px;
     border-radius: 12px;
     background: var(--green-mid);
     color: #fff;
   }
 
   /* Steps */
-  .steps { list-style: none; counter-reset: step; }
+  .steps { list-style: none; counter-reset: step; margin-bottom: 20px; }
   .steps li {
     counter-increment: step;
     display: flex;
     gap: 16px;
-    margin-bottom: 14px;
-    padding: 14px 18px;
+    margin-bottom: 16px;
+    padding: 16px 20px;
     background: var(--white);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    font-size: 13.5px;
+    font-size: 15px;
     line-height: 1.6;
     color: var(--text);
     box-shadow: var(--shadow);
   }
   .steps li::before {
     content: counter(step);
-    min-width: 28px; height: 28px;
+    min-width: 32px; height: 32px;
     background: var(--green-mid);
     color: #fff;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 800;
     flex-shrink: 0;
-    margin-top: 1px;
   }
 
   /* Tips / Notes */
   .callout {
     border-left: 4px solid;
     border-radius: 0 var(--radius) var(--radius) 0;
-    padding: 14px 18px;
-    margin: 16px 0;
-    font-size: 13.5px;
-    line-height: 1.7;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.6;
   }
   .callout.tip  { border-color: var(--green-acc); background: rgba(63,185,80,.08); }
   .callout.note { border-color: #3b82f6; background: rgba(59,130,246,.08); }
   .callout.warn { border-color: #f59e0b; background: rgba(245,158,11,.08); }
   .callout.danger { border-color: #ef4444; background: rgba(239,68,68,.08); }
-  .callout strong { display: block; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .callout strong { display: block; margin-bottom: 6px; font-size: 13px; text-transform: uppercase; letter-spacing: .5px; }
   .callout.tip strong { color: var(--green-acc); }
   .callout.note strong { color: #3b82f6; }
   .callout.warn strong { color: #f59e0b; }
   .callout.danger strong { color: #ef4444; }
 
   /* Tables */
-  .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: var(--radius); border: 1px solid var(--border); }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .table-wrap { overflow-x: auto; margin: 20px 0; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 600px; }
   thead { background: var(--green-dark); color: #fff; }
-  thead th { padding: 12px 16px; text-align: left; font-weight: 700; white-space: nowrap; }
+  thead th { padding: 14px 20px; text-align: left; font-weight: 700; white-space: nowrap; }
   tbody tr { border-bottom: 1px solid var(--border); }
   tbody tr:last-child { border-bottom: none; }
-  tbody td { padding: 11px 16px; color: var(--text); vertical-align: top; }
+  tbody td { padding: 14px 20px; color: var(--text); vertical-align: top; line-height: 1.6; }
   tbody tr:nth-child(even) { background: var(--cream2); }
 
   /* Status badges */
   .status {
     display: inline-block;
-    padding: 3px 10px;
+    padding: 4px 12px;
     border-radius: 12px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
   }
   .status.pending  { background: #fef3c7; color: #92400e; }
@@ -378,29 +392,34 @@
     background: var(--white);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     overflow: hidden;
+    box-shadow: var(--shadow);
   }
   .faq-q {
-    padding: 14px 18px;
+    padding: 16px 20px;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 15px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: var(--text);
     user-select: none;
+    transition: background .2s;
   }
-  .faq-q::after { content: '﹢'; font-size: 20px; color: var(--green-acc); }
-  .faq-item.open .faq-q::after { content: '﹣'; }
+  .faq-q:hover { background: var(--cream2); }
+  .faq-q::after { content: '+'; font-size: 24px; color: var(--green-acc); line-height: 1; font-weight: 400; }
+  .faq-item.open .faq-q::after { content: '−'; }
   .faq-a {
     display: none;
-    padding: 0 18px 14px;
-    font-size: 13.5px;
+    padding: 0 20px 20px;
+    font-size: 14.5px;
     color: var(--text-muted);
     line-height: 1.7;
     border-top: 1px solid var(--border);
+    margin-top: 10px;
+    padding-top: 16px;
   }
   .faq-item.open .faq-a { display: block; }
 
@@ -408,76 +427,181 @@
   #hamburger {
     display: none;
     position: fixed;
-    top: 14px; left: 14px;
+    top: 12px; left: 16px;
     z-index: 200;
     background: var(--green-dark);
     color: #fff;
     border: none;
-    width: 40px; height: 40px;
+    width: 44px; height: 44px;
     border-radius: 8px;
-    font-size: 20px;
+    font-size: 24px;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,.2);
   }
   .sidebar-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,.5);
+    background: rgba(0,0,0,.6);
     z-index: 90;
+    backdrop-filter: blur(2px);
   }
 
   /* Divider */
-  hr.divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+  hr.divider { border: none; border-top: 2px dashed var(--border); margin: 48px 0; }
 
   /* Flow diagram */
   .flow {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 8px;
-    margin: 16px 0;
+    gap: 12px;
+    margin: 24px 0;
   }
   .flow-step {
     background: var(--white);
     border: 2px solid var(--green-mid);
     border-radius: 8px;
-    padding: 8px 16px;
-    font-size: 12px;
+    padding: 10px 18px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--green-mid);
     white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   }
   body.dark .flow-step { color: var(--green-acc); border-color: var(--green-acc); }
-  .flow-arrow { color: var(--green-acc); font-size: 18px; }
+  .flow-arrow { color: var(--green-acc); font-size: 20px; font-weight: bold; }
+
+  /* Footer Card */
+  .footer-card {
+    text-align: center; 
+    padding: 40px 24px; 
+    background: linear-gradient(135deg, var(--green-dark) 0%, #0f2918 100%); 
+    color: #fff; 
+    border-radius: var(--radius);
+    margin-top: 40px;
+  }
+  .footer-card .icon { font-size: 48px; margin-bottom: 16px; }
+  .footer-card h3 { color: #fff; font-size: 20px; margin-bottom: 12px; }
+  .footer-card p { color: rgba(255,255,255,.8); font-size: 14px; margin-bottom: 0; line-height: 1.6; }
 
   /* Print */
   @media print {
     #sidebar, #topbar, #hamburger, .sidebar-overlay { display: none !important; }
-    #main { margin-left: 0 !important; }
-    #content { padding: 20px !important; max-width: 100% !important; }
-    .cover { break-inside: avoid; }
-    .section { break-inside: avoid; }
+    #main { margin-left: 0 !important; width: 100% !important; display: block !important; }
+    #content-wrapper { padding: 0 !important; display: block !important; }
+    #content { padding: 10px !important; max-width: 100% !important; width: 100% !important; }
+    
     body { background: #fff !important; color: #000 !important; }
+    * { 
+      color: #000 !important; 
+      box-shadow: none !important; 
+      text-shadow: none !important; 
+      background: transparent !important; 
+    }
+    
+    .cover { 
+      padding: 30px 20px !important; 
+      border: 2px solid #000 !important; 
+      margin-bottom: 30px !important;
+      page-break-after: auto;
+    }
+    .cover::before { display: none !important; }
+    .cover .version-badge { border: 1px solid #000 !important; color: #000 !important; }
+    
+    .footer-card { border: 2px solid #000 !important; padding: 20px !important; }
+    
+    a { text-decoration: none; color: #000 !important; }
+    table, th, td { border: 1px solid #000 !important; }
+    thead th { border-bottom: 2px solid #000 !important; }
+    
+    .status { border: 1px solid #000 !important; padding: 2px 6px !important; }
+    .card, .role-card, .steps li, .callout { border: 1px solid #000 !important; page-break-inside: avoid; }
+    .section { page-break-inside: auto; }
+    
+    /* Prevent page breaks inside important blocks */
+    h2, h3, .table-wrap, .role-grid { page-break-inside: avoid; }
   }
 
-  /* Responsive */
+  /* ─── RESPONSIVE QUERIES ─────────────────────────────── */
+  
+  /* Desktop Medium */
+  @media (max-width: 1024px) {
+    #content-wrapper { padding: 24px; }
+    .cover { padding: 48px; }
+    .cover h1 { font-size: 36px; }
+  }
+
+  /* Tablet & Mobile Landscape */
   @media (max-width: 768px) {
     #sidebar { transform: translateX(-100%); }
     #sidebar.open { transform: translateX(0); }
     .sidebar-overlay.open { display: block; }
     #hamburger { display: flex; align-items: center; justify-content: center; }
-    #main { margin-left: 0; }
-    #content { padding: 20px; }
-    .cover { padding: 36px 24px; }
+    
+    #main { margin-left: 0; width: 100%; }
+    #content-wrapper { padding: 16px 12px; }
+    
+    #topbar { padding: 10px 16px 10px 64px; }
+    .breadcrumb { display: none; } /* Hide breadcrumb on small mobile to save space */
+    .topbar-actions { width: 100%; justify-content: flex-end; }
+    
+    .cover { padding: 24px 16px; border-radius: 12px; }
     .cover h1 { font-size: 26px; }
-    #topbar { padding: 12px 20px 12px 64px; }
-    .role-grid { grid-template-columns: 1fr 1fr; }
+    .cover p { font-size: 14px; line-height: 1.5; }
+    .cover .meta { gap: 12px; flex-direction: column; margin-top: 20px; }
+    
+    .section { margin-bottom: 40px; scroll-margin-top: 70px; }
+    .section-title h2 { font-size: 20px; }
+    .section-title .icon-wrap { width: 36px; height: 36px; font-size: 18px; border-radius: 8px; }
+    
+    .role-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .role-card { padding: 14px; }
+    .role-card .emoji { font-size: 28px; margin-bottom: 8px; }
+    
+    .steps li { padding: 12px; font-size: 14px; flex-direction: row; align-items: flex-start; gap: 12px; }
+    .steps li::before { min-width: 26px; height: 26px; font-size: 12px; margin-top: 2px; }
+    
+    .card { padding: 16px; }
+    .callout { padding: 12px 16px; font-size: 13px; margin: 16px 0; }
+    
+    h3.subsection { font-size: 16px; margin: 24px 0 12px; }
+    p { font-size: 14px; line-height: 1.6; }
+    
+    table { font-size: 13px; }
+    th, td { padding: 10px 14px; }
+  }
+
+  /* Mobile Portrait */
+  @media (max-width: 480px) {
+    .role-grid { grid-template-columns: 1fr; }
+    .cover h1 { font-size: 22px; }
+    
+    .section-title { flex-direction: column; align-items: flex-start; gap: 8px; padding-bottom: 12px; }
+    .section-title .badge { margin-left: 0; }
+    
+    /* Make flow diagram stack vertically on very small screens */
+    .flow { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .flow-arrow { transform: rotate(90deg); margin-left: 18px; font-size: 16px; }
+    .flow-step { padding: 8px 14px; font-size: 13px; width: 100%; max-width: 250px; text-align: center; }
+    
+    /* FAQ adjust */
+    .faq-q { padding: 14px 16px; font-size: 14px; }
+    .faq-q::after { font-size: 20px; }
+    .faq-a { padding: 0 16px 16px; font-size: 13.5px; }
+    
+    .btn-print { padding: 8px 12px; font-size: 13px; }
+    .btn-print span { display: none; } /* Hide text, show only icon on small phones */
+    
+    .footer-card { padding: 24px 16px; }
+    .footer-card .icon { font-size: 36px; }
+    .footer-card h3 { font-size: 18px; }
   }
 </style>
 </head>
 <body>
 
-<button id="hamburger" onclick="toggleSidebar()">☰</button>
+<button id="hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
 <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
 
 <!-- SIDEBAR -->
@@ -490,10 +614,10 @@
 
   <div class="sidebar-nav">
     <div class="nav-section">Pengenalan</div>
-    <a href="#cover" class="nav-link" onclick="setActive(this)"><span class="icon">📖</span> Tentang Manual Book</a>
-    <a href="#overview" class="nav-link" onclick="setActive(this)"><span class="icon">🏠</span> Gambaran Umum Sistem</a>
-    <a href="#roles" class="nav-link" onclick="setActive(this)"><span class="icon">👥</span> Daftar Pengguna & Peran</a>
-    <a href="#login" class="nav-link" onclick="setActive(this)"><span class="icon">🔐</span> Login & Akses Sistem</a>
+    <a href="#cover" class="nav-link active" onclick="setActive(this)"><span class="icon">📖</span> Tentang Manual Book</a>
+    <a href="#overview" class="nav-link" onclick="setActive(this)"><span class="icon">🏠</span> Gambaran Umum</a>
+    <a href="#roles" class="nav-link" onclick="setActive(this)"><span class="icon">👥</span> Pengguna & Peran</a>
+    <a href="#login" class="nav-link" onclick="setActive(this)"><span class="icon">🔐</span> Login & Akses</a>
 
     <div class="nav-section">Panduan Per Peran</div>
     <a href="#dosen" class="nav-link" onclick="setActive(this)"><span class="icon">👨‍🏫</span> Dosen</a>
@@ -506,10 +630,10 @@
     <a href="#kaprodi" class="nav-link" onclick="setActive(this)"><span class="icon">🎯</span> Kaprodi</a>
 
     <div class="nav-section">Fitur & Referensi</div>
-    <a href="#proposal-flow" class="nav-link" onclick="setActive(this)"><span class="icon">🔄</span> Alur Proses Proposal</a>
-    <a href="#import" class="nav-link" onclick="setActive(this)"><span class="icon">📥</span> Import Data Excel</a>
+    <a href="#proposal-flow" class="nav-link" onclick="setActive(this)"><span class="icon">🔄</span> Alur Proses</a>
+    <a href="#import" class="nav-link" onclick="setActive(this)"><span class="icon">📥</span> Import Excel</a>
     <a href="#email" class="nav-link" onclick="setActive(this)"><span class="icon">📧</span> Notifikasi Email</a>
-    <a href="#status-ref" class="nav-link" onclick="setActive(this)"><span class="icon">🏷️</span> Referensi Status</a>
+    <a href="#status-ref" class="nav-link" onclick="setActive(this)"><span class="icon">🏷️</span> Status Referensi</a>
     <a href="#faq" class="nav-link" onclick="setActive(this)"><span class="icon">❓</span> FAQ</a>
   </div>
 
@@ -525,780 +649,557 @@
     <div class="breadcrumb">Buku Panduan &nbsp;›&nbsp; <b>SI-PEKA LPPM AMIK Taruna</b></div>
     <div class="topbar-actions">
       <button class="btn-icon" onclick="toggleDark()" title="Dark / Light Mode">🌙</button>
-      <button class="btn-print" onclick="window.print()">🖨️ &nbsp;Cetak</button>
+      <button class="btn-print" onclick="window.print()">🖨️ <span>Cetak Dokumen</span></button>
     </div>
   </div>
 
-  <!-- CONTENT -->
-  <div id="content">
+  <!-- CONTENT WRAPPER -->
+  <div id="content-wrapper">
+    <div id="content">
 
-    <!-- COVER -->
-    <div class="cover" id="cover">
-      <div class="version-badge">📋 &nbsp;Versi 1.0 — Agustus 2025</div>
-      <h1>Buku Panduan<br>Pengguna Aplikasi SI-PEKA</h1>
-      <p>Sistem Informasi Penelitian & Pengabdian Masyarakat (SI-PEKA) adalah platform digital resmi LPPM AMIK Taruna Probolinggo untuk mengelola seluruh alur pengajuan, validasi, dan pelaporan kegiatan penelitian & pengabdian masyarakat secara paperless.</p>
-      <div class="meta">
-        <div class="meta-item">
-          <strong>Instansi</strong>LPPM AMIK Taruna Probolinggo
-        </div>
-        <div class="meta-item">
-          <strong>Nama Sistem</strong>SI-PEKA
-        </div>
-        <div class="meta-item">
-          <strong>Dibuat</strong>Agustus 2025
-        </div>
-        <div class="meta-item">
-          <strong>Versi</strong>1.0
-        </div>
-      </div>
-    </div>
-
-    <!-- GAMBARAN UMUM -->
-    <div class="section" id="overview">
-      <div class="section-title">
-        <div class="icon-wrap">🏠</div>
-        <h2>Gambaran Umum Sistem</h2>
-      </div>
-      <p>SI-PEKA (Sistem Informasi Penelitian & Pengabdian Masyarakat) adalah aplikasi berbasis web yang dikembangkan untuk memudahkan civitas akademika AMIK Taruna Probolinggo dalam mengelola seluruh kegiatan penelitian dan pengabdian masyarakat, mulai dari pengajuan proposal hingga laporan akhir.</p>
-
-      <h3 class="subsection">Fitur Utama Sistem</h3>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Fitur</th><th>Deskripsi</th></tr></thead>
-          <tbody>
-            <tr><td>📝 Pengajuan Proposal</td><td>Dosen & mahasiswa dapat mengajukan proposal penelitian atau pengabdian masyarakat secara online.</td></tr>
-            <tr><td>✅ Validasi LPPM</td><td>LPPM mereview, menyetujui, menolak, atau meminta revisi proposal yang masuk.</td></tr>
-            <tr><td>💰 Persetujuan Dana</td><td>Wadir II mengelola persetujuan dan pencairan dana PT untuk proposal yang disetujui.</td></tr>
-            <tr><td>📄 Surat Tugas</td><td>Administrasi menerbitkan Surat Tugas resmi setelah proses keuangan selesai.</td></tr>
-            <tr><td>📊 Dashboard Monitoring</td><td>Setiap peran memiliki dashboard khusus untuk memantau statistik sesuai akses mereka.</td></tr>
-            <tr><td>📥 Import Data Excel</td><td>Admin dapat mengimpor data dosen dan mahasiswa secara massal melalui file Excel.</td></tr>
-            <tr><td>📧 Notifikasi Email</td><td>Sistem mengirim email otomatis untuk OTP reset password dan pemberitahuan Surat Tugas.</td></tr>
-            <tr><td>🌙 Dark Mode</td><td>Antarmuka mendukung mode gelap untuk kenyamanan visual.</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3 class="subsection">Persyaratan Akses</h3>
-      <div class="card">
-        <p style="margin:0">✅ &nbsp;Browser modern: Google Chrome, Microsoft Edge, Mozilla Firefox (versi terbaru)<br>
-        ✅ &nbsp;Koneksi internet yang stabil<br>
-        ✅ &nbsp;Akun yang telah didaftarkan oleh Admin<br>
-        ✅ &nbsp;Email aktif (untuk fitur reset password OTP)</p>
-      </div>
-    </div>
-
-    <!-- PERAN PENGGUNA -->
-    <div class="section" id="roles">
-      <div class="section-title">
-        <div class="icon-wrap">👥</div>
-        <h2>Daftar Pengguna & Peran</h2>
-      </div>
-      <p>SI-PEKA memiliki 8 peran pengguna dengan akses dan kemampuan yang berbeda-beda:</p>
-
-      <div class="role-grid">
-        <div class="role-card">
-          <div class="emoji">👨‍🏫</div>
-          <div class="role-name">Dosen</div>
-          <div class="role-desc">Mengajukan proposal penelitian & pengabdian masyarakat</div>
-          <div class="role-badge">Dosen</div>
-        </div>
-        <div class="role-card">
-          <div class="emoji">🎓</div>
-          <div class="role-name">Mahasiswa</div>
-          <div class="role-desc">Mengajukan proposal penelitian dengan bimbingan dosen</div>
-          <div class="role-badge">Mahasiswa</div>
-        </div>
-        <div class="role-card">
-          <div class="emoji">🏛️</div>
-          <div class="role-name">LPPM</div>
-          <div class="role-desc">Ketua LPPM yang mereview dan memvalidasi semua proposal</div>
-          <div class="role-badge">LPPM</div>
-        </div>
-        <div class="role-card">
-          <div class="emoji">📄</div>
-          <div class="role-name">Administrasi</div>
-          <div class="role-desc">Menerbitkan Surat Tugas dan mengelola antrian administrasi</div>
-          <div class="role-badge">Administrasi</div>
-        </div>
-        <div class="role-card">
-          <div class="emoji">💰</div>
-          <div class="role-name">Wadir II</div>
-          <div class="role-desc">Mengelola persetujuan dan pencairan dana penelitian</div>
-          <div class="role-badge">Wadir II</div>
-        </div>
-        <div class="role-card">
-          <div class="emoji">🏅</div>
-          <div class="role-name">Direktur</div>
-          <div class="role-desc">Monitoring global & pengesahan pendanaan akhir</div>
-          <div class="role-badge">Direktur</div>
-        </div>
-        <div class="role-card">
-          <div class="emoji">📊</div>
-          <div class="role-name">PPM</div>
-          <div class="role-desc">Monitoring & penjaminan mutu kegiatan penelitian</div>
-          <div class="role-badge">PPM</div>
-        </div>
-        <div class="role-card">
-          <div class="emoji">🎯</div>
-          <div class="role-name">Kaprodi</div>
-          <div class="role-desc">Monitoring proposal dosen di program studi yang dipimpin</div>
-          <div class="role-badge">Kaprodi</div>
+      <!-- COVER -->
+      <div class="cover" id="cover">
+        <div class="version-badge">📋 &nbsp;Versi 1.0 — Agustus 2025</div>
+        <h1>Buku Panduan<br>Pengguna Aplikasi SI-PEKA</h1>
+        <p>Sistem Informasi Penelitian & Pengabdian Masyarakat (SI-PEKA) adalah platform digital resmi LPPM AMIK Taruna Probolinggo untuk mengelola seluruh alur pengajuan, validasi, dan pelaporan kegiatan penelitian & pengabdian masyarakat secara paperless.</p>
+        <div class="meta">
+          <div class="meta-item">
+            <strong>Instansi</strong>LPPM AMIK Taruna Probolinggo
+          </div>
+          <div class="meta-item">
+            <strong>Nama Sistem</strong>SI-PEKA
+          </div>
+          <div class="meta-item">
+            <strong>Dibuat</strong>Agustus 2025
+          </div>
+          <div class="meta-item">
+            <strong>Versi</strong>1.0
+          </div>
         </div>
       </div>
 
-      <div class="callout note">
-        <strong>📌 Informasi</strong>
-        Akun pengguna dibuat oleh Admin (Staf Administrasi). Dosen dan mahasiswa baru tidak bisa mendaftar mandiri. Hubungi Admin jika belum memiliki akun.
-      </div>
-    </div>
-
-    <!-- LOGIN -->
-    <div class="section" id="login">
-      <div class="section-title">
-        <div class="icon-wrap">🔐</div>
-        <h2>Login & Akses Sistem</h2>
-      </div>
-
-      <h3 class="subsection">Cara Login</h3>
-      <ol class="steps">
-        <li>Buka browser dan akses URL aplikasi SI-PEKA yang telah diberikan oleh Admin.</li>
-        <li>Masukkan <strong>NIDN/NIM</strong> (bukan email) pada kolom login.</li>
-        <li>Masukkan <strong>Password</strong> Anda. Password default untuk akun baru biasanya adalah <em>NUPTK + 123</em> (untuk dosen) atau <em>NIM + 123</em> (untuk mahasiswa).</li>
-        <li>Klik tombol <strong>Login</strong>. Anda akan diarahkan ke dashboard sesuai peran Anda.</li>
-      </ol>
-
-      <div class="callout warn">
-        <strong>⚠️ Perhatian</strong>
-        Segera ganti password default setelah login pertama kali untuk keamanan akun Anda.
-      </div>
-
-      <h3 class="subsection">Reset Password via OTP</h3>
-      <ol class="steps">
-        <li>Di halaman login, klik <strong>"Lupa Password?"</strong></li>
-        <li>Masukkan <strong>email</strong> yang terdaftar pada akun Anda.</li>
-        <li>Sistem akan mengirimkan <strong>Kode OTP 6 digit</strong> ke email Anda. Kode berlaku selama <strong>15 menit</strong>.</li>
-        <li>Masukkan kode OTP yang diterima, lalu buat password baru.</li>
-      </ol>
-
-      <div class="callout tip">
-        <strong>💡 Tips</strong>
-        Jika email OTP tidak muncul di kotak masuk, periksa folder <em>Spam / Junk</em> email Anda.
-      </div>
-    </div>
-
-    <hr class="divider">
-
-    <!-- DOSEN -->
-    <div class="section" id="dosen">
-      <div class="section-title">
-        <div class="icon-wrap">👨‍🏫</div>
-        <h2>Panduan Dosen</h2>
-        <span class="badge">Peran: Dosen</span>
-      </div>
-      <p>Dosen adalah pengguna utama yang mengajukan proposal penelitian dan pengabdian masyarakat. Setelah login, dosen akan melihat dashboard pribadi berisi statistik dan riwayat proposal mereka.</p>
-
-      <h3 class="subsection">Dashboard Dosen</h3>
-      <p>Dashboard menampilkan ringkasan statistik proposal Anda:</p>
-      <div class="card">
-        <p style="margin:0">📋 &nbsp;<strong>Total Proposal</strong> — Jumlah semua proposal yang pernah diajukan<br>
-        ✅ &nbsp;<strong>Disetujui</strong> — Proposal yang telah disetujui LPPM<br>
-        🕐 &nbsp;<strong>Sedang Direview</strong> — Proposal yang masih menunggu keputusan<br>
-        📁 &nbsp;<strong>Laporan Akhir</strong> — Jumlah laporan akhir yang telah diunggah</p>
-      </div>
-
-      <h3 class="subsection">Mengajukan Proposal Baru</h3>
-      <ol class="steps">
-        <li>Di sidebar kiri, klik menu <strong>"Ajukan Proposal"</strong> atau <strong>"Proposal Baru"</strong>.</li>
-        <li>Pilih <strong>Jenis Kegiatan</strong>: <em>Penelitian</em> atau <em>Pengabdian Masyarakat</em>.</li>
-        <li>Isi semua kolom wajib: <strong>Judul</strong>, <strong>Tahun</strong>, deskripsi singkat, dan data pendukung lainnya.</li>
-        <li>Jika kegiatan memiliki pendanaan dari PT, isi kolom <strong>Dana PT</strong>. Jika tidak ada, kosongkan atau isi 0.</li>
-        <li>Unggah <strong>file proposal</strong> dalam format PDF.</li>
-        <li>Jika ada <strong>Surat MOU</strong> dengan mitra, unggah file MOU-nya.</li>
-        <li>Klik <strong>"Kirim Proposal"</strong> untuk mengirim ke LPPM.</li>
-      </ol>
-
-      <div class="callout tip">
-        <strong>💡 Tips</strong>
-        Pastikan judul proposal jelas dan deskriptif. Proposal dengan judul yang spesifik lebih mudah diproses oleh LPPM.
-      </div>
-
-      <h3 class="subsection">Melihat Status Proposal</h3>
-      <ol class="steps">
-        <li>Klik menu <strong>"Riwayat Proposal"</strong> di sidebar.</li>
-        <li>Tabel akan menampilkan semua proposal beserta status terkini.</li>
-        <li>Klik ikon 👁️ <strong>Detail</strong> untuk melihat rincian dan catatan revisi dari LPPM.</li>
-      </ol>
-
-      <h3 class="subsection">Mengunggah Revisi Proposal</h3>
-      <ol class="steps">
-        <li>Jika status proposal adalah <span class="status revisi">Revisi</span>, buka halaman Detail proposal.</li>
-        <li>Baca catatan revisi yang diberikan oleh LPPM.</li>
-        <li>Perbaiki dokumen proposal sesuai catatan, lalu unggah file yang sudah direvisi.</li>
-        <li>Klik <strong>"Kirim Revisi"</strong> untuk mengirim ulang ke LPPM.</li>
-      </ol>
-
-      <h3 class="subsection">Mengunggah Laporan Akhir</h3>
-      <ol class="steps">
-        <li>Setelah kegiatan selesai dan Surat Tugas diterbitkan, buka halaman Detail proposal.</li>
-        <li>Isi <strong>Logbook/Catatan Harian</strong> kegiatan secara rutin selama pelaksanaan.</li>
-        <li>Unggah file <strong>Laporan Akhir</strong> dalam format PDF.</li>
-        <li>Klik tombol simpan. Status proposal akan berubah menunggu persetujuan laporan.</li>
-      </ol>
-    </div>
-
-    <!-- MAHASISWA -->
-    <div class="section" id="mahasiswa">
-      <div class="section-title">
-        <div class="icon-wrap">🎓</div>
-        <h2>Panduan Mahasiswa</h2>
-        <span class="badge">Peran: Mahasiswa</span>
-      </div>
-      <p>Mahasiswa dapat mengajukan proposal penelitian melalui SI-PEKA. Prosesnya hampir sama dengan dosen, namun mahasiswa umumnya bekerja di bawah bimbingan dosen pembimbing.</p>
-
-      <h3 class="subsection">Dashboard Mahasiswa</h3>
-      <p>Dashboard mahasiswa menampilkan ringkasan proposal yang sudah diajukan, status terkini, dan informasi penting lainnya.</p>
-
-      <h3 class="subsection">Mengajukan Proposal</h3>
-      <ol class="steps">
-        <li>Setelah login, klik <strong>"Ajukan Proposal"</strong> di sidebar.</li>
-        <li>Isi formulir proposal dengan lengkap termasuk judul, jenis, dan tahun pelaksanaan.</li>
-        <li>Unggah file proposal PDF.</li>
-        <li>Klik <strong>"Kirim"</strong> untuk mengirimkan ke LPPM.</li>
-      </ol>
-
-      <div class="callout note">
-        <strong>📌 Catatan</strong>
-        Mahasiswa yang belum memiliki akun perlu menghubungi Administrasi untuk didaftarkan ke sistem. Data mahasiswa juga bisa diimpor secara massal oleh Admin menggunakan file Excel.
-      </div>
-    </div>
-
-    <!-- LPPM -->
-    <div class="section" id="lppm">
-      <div class="section-title">
-        <div class="icon-wrap">🏛️</div>
-        <h2>Panduan LPPM (Ketua LPPM)</h2>
-        <span class="badge">Peran: LPPM</span>
-      </div>
-      <p>Peran LPPM adalah sebagai validator utama seluruh proposal yang masuk. LPPM memiliki akses penuh untuk menyetujui, menolak, atau meminta revisi proposal.</p>
-
-      <h3 class="subsection">Dashboard LPPM</h3>
-      <p>Dashboard LPPM menampilkan statistik lengkap:</p>
-      <div class="card">
-        <p style="margin:0">
-        📬 &nbsp;<strong>Proposal Masuk</strong> — Total proposal pending yang belum diproses<br>
-        ✅ &nbsp;<strong>Disetujui LPPM</strong> — Proposal yang sudah disetujui<br>
-        ⏳ &nbsp;<strong>Menunggu Surat Tugas</strong> — Sudah disetujui, belum ada Surat Tugas<br>
-        👤 &nbsp;<strong>Dosen Aktif</strong> — Total dosen terdaftar di sistem</p>
-      </div>
-
-      <h3 class="subsection">Validasi Proposal</h3>
-      <ol class="steps">
-        <li>Klik menu <strong>"Validasi Proposal"</strong> di sidebar.</li>
-        <li>Tabel menampilkan semua proposal yang masuk. Klik ikon 👁️ untuk melihat detail.</li>
-        <li>Baca dan periksa dokumen proposal yang diunggah oleh dosen/mahasiswa.</li>
-        <li>Pilih aksi yang sesuai:
-          <br>— <strong>✅ Setujui</strong>: Proposal layak dilanjutkan ke proses berikutnya.
-          <br>— <strong>🔄 Revisi</strong>: Minta perbaikan. Tulis catatan revisi yang jelas.
-          <br>— <strong>❌ Tolak</strong>: Proposal tidak dapat dilanjutkan.</li>
-      </ol>
-
-      <div class="callout tip">
-        <strong>💡 Tips LPPM</strong>
-        Saat meminta revisi, tuliskan catatan yang spesifik dan detail agar dosen/mahasiswa dapat memperbaiki proposal dengan tepat sasaran.
-      </div>
-
-      <h3 class="subsection">Verifikasi Laporan Akhir</h3>
-      <ol class="steps">
-        <li>Klik menu <strong>"Verifikasi Laporan"</strong> di sidebar.</li>
-        <li>Tabel menampilkan proposal yang sudah memiliki laporan akhir dari dosen.</li>
-        <li>Periksa kelengkapan laporan akhir dan logbook kegiatan.</li>
-        <li>Klik <strong>"Setujui Laporan"</strong> untuk menandai kegiatan sebagai selesai.</li>
-      </ol>
-
-      <h3 class="subsection">Monitoring Seluruh Riwayat</h3>
-      <ol class="steps">
-        <li>Klik menu <strong>"Monitoring Riwayat"</strong> untuk melihat semua proposal dari semua dosen/mahasiswa.</li>
-        <li>Gunakan filter <strong>Jenis Kegiatan</strong>, <strong>Tahun</strong>, dan <strong>Program Studi</strong> untuk mempersempit tampilan.</li>
-        <li>Klik nama dosen untuk melihat seluruh riwayat proposal dosen tersebut.</li>
-      </ol>
-
-      <h3 class="subsection">Mengatur Ketua LPPM Aktif</h3>
-      <ol class="steps">
-        <li>Di dashboard, temukan card <strong>"Pengaturan Ketua LPPM"</strong>.</li>
-        <li>Pilih nama Ketua LPPM yang sedang menjabat dari dropdown.</li>
-        <li>Sistem akan menyimpan pilihan secara otomatis. Nama dan NUPTK Ketua LPPM yang dipilih akan tercetak pada dokumen-dokumen resmi sistem.</li>
-      </ol>
-    </div>
-
-    <!-- ADMINISTRASI -->
-    <div class="section" id="administrasi">
-      <div class="section-title">
-        <div class="icon-wrap">📄</div>
-        <h2>Panduan Administrasi</h2>
-        <span class="badge">Peran: Administrasi</span>
-      </div>
-      <p>Staf Administrasi bertugas menerbitkan Surat Tugas resmi untuk kegiatan yang telah mendapatkan persetujuan, mengelola data pengguna (dosen & mahasiswa), dan mengelola berita.</p>
-
-      <h3 class="subsection">Antrian Surat Tugas</h3>
-      <ol class="steps">
-        <li>Di sidebar, klik <strong>"Antrean Surat Tugas"</strong>.</li>
-        <li>Daftar menampilkan proposal yang sudah siap dibuatkan Surat Tugas (proses keuangan selesai atau tidak ada dana PT).</li>
-        <li>Klik ikon ✏️ <strong>Edit/Proses</strong> pada proposal yang ingin dibuatkan surat.</li>
-        <li>Isi <strong>Nomor Surat Tugas</strong> sesuai format penomoran yang berlaku di institusi.</li>
-        <li>Isi <strong>Tanggal Pelaksanaan</strong> kegiatan.</li>
-        <li>Klik <strong>"Simpan"</strong>. Sistem akan otomatis mengirim email notifikasi ke dosen/mahasiswa yang bersangkutan.</li>
-      </ol>
-
-      <div class="callout note">
-        <strong>📌 Catatan</strong>
-        Setelah Surat Tugas diterbitkan, dosen dapat mengunduh (download) dokumen Surat Tugas melalui halaman detail proposal mereka.
-      </div>
-
-      <h3 class="subsection">Manajemen Pengguna</h3>
-      <ol class="steps">
-        <li>Klik menu <strong>"Manajemen User"</strong> di sidebar.</li>
-        <li>Halaman menampilkan daftar semua pengguna terdaftar.</li>
-        <li>Klik <strong>"+ Tambah User"</strong> untuk menambah pengguna baru secara manual.</li>
-        <li>Isi form: NIDN/NIM, Nama, Email, No HP, Program Studi, Tahun Masuk (khusus mahasiswa), Password, dan Role.</li>
-        <li>Klik <strong>"Simpan User"</strong>.</li>
-      </ol>
-
-      <h3 class="subsection">Import Data Massal via Excel</h3>
-      <p>Untuk menambahkan banyak dosen atau mahasiswa sekaligus:</p>
-      <ol class="steps">
-        <li>Klik tombol <strong>"Import Dosen (Excel)"</strong> atau <strong>"Import Mahasiswa (Excel)"</strong>.</li>
-        <li>Klik <strong>"Unduh Template Excel"</strong> untuk mendapatkan format file yang benar.</li>
-        <li>Isi file template dengan data yang diperlukan (lihat bagian <a href="#import">Import Data Excel</a>).</li>
-        <li>Pilih file yang sudah diisi, lalu klik <strong>"Mulai Import"</strong>.</li>
-        <li>Sistem akan menampilkan ringkasan: berapa data berhasil diimpor dan berapa yang dilewati (sudah ada).</li>
-      </ol>
-
-      <h3 class="subsection">Kelola Berita</h3>
-      <ol class="steps">
-        <li>Klik menu <strong>"Kelola Berita"</strong> di sidebar.</li>
-        <li>Klik <strong>"Tambah Berita"</strong> untuk membuat pengumuman atau berita baru.</li>
-        <li>Isi judul, konten berita, dan unggah gambar jika ada.</li>
-        <li>Klik <strong>"Simpan"</strong>. Berita akan tampil di halaman beranda (landing page) aplikasi.</li>
-      </ol>
-    </div>
-
-    <!-- WADIR II -->
-    <div class="section" id="wadir">
-      <div class="section-title">
-        <div class="icon-wrap">💰</div>
-        <h2>Panduan Wadir II (Keuangan)</h2>
-        <span class="badge">Peran: Wadir II</span>
-      </div>
-      <p>Wakil Direktur II bertanggung jawab atas persetujuan dan pencairan dana PT (Perguruan Tinggi) untuk proposal penelitian atau pengabdian yang memerlukan pendanaan dari institusi.</p>
-
-      <h3 class="subsection">Dashboard Keuangan</h3>
-      <div class="card">
-        <p style="margin:0">
-        ⏳ &nbsp;<strong>Menunggu Pencairan</strong> — Proposal dengan dana PT yang belum dicairkan<br>
-        ✅ &nbsp;<strong>Sudah Cair</strong> — Total proposal yang dana PT-nya sudah dicairkan<br>
-        💵 &nbsp;<strong>Total Anggaran Cair</strong> — Akumulasi dana PT yang telah dicairkan<br>
-        📋 &nbsp;<strong>Antrean Keuangan</strong> — Daftar 3 proposal teratas yang menunggu proses</p>
-      </div>
-
-      <h3 class="subsection">Persetujuan & Pencairan Dana</h3>
-      <ol class="steps">
-        <li>Di sidebar, klik menu keuangan yang tersedia.</li>
-        <li>Tabel menampilkan proposal yang sudah disetujui LPPM dan memiliki Dana PT > 0.</li>
-        <li>Klik detail proposal untuk melihat rincian dana yang diajukan.</li>
-        <li>Klik <strong>"Setujui Pencairan"</strong> untuk memproses pencairan dana ke dosen/mahasiswa.</li>
-        <li>Setelah persetujuan Wadir II, proposal akan masuk ke antrian Administrasi untuk diterbitkan Surat Tugas.</li>
-      </ol>
-
-      <div class="callout warn">
-        <strong>⚠️ Penting</strong>
-        Proposal tanpa Dana PT (Dana PT = 0) tidak perlu melalui proses persetujuan Wadir II — langsung masuk ke antrian Administrasi.
-      </div>
-    </div>
-
-    <!-- DIREKTUR -->
-    <div class="section" id="direktur">
-      <div class="section-title">
-        <div class="icon-wrap">🏅</div>
-        <h2>Panduan Direktur</h2>
-        <span class="badge">Peran: Direktur</span>
-      </div>
-      <p>Direktur memiliki akses monitoring tertinggi terhadap seluruh kegiatan penelitian dan pengabdian masyarakat di AMIK Taruna, serta mengesahkan pendanaan dari institusi.</p>
-
-      <h3 class="subsection">Dashboard Direktur</h3>
-      <p>Dashboard Direktur menampilkan statistik keseluruhan dari semua proposal yang ada di sistem, dapat difilter berdasarkan Jenis Kegiatan, Tahun Akademik, dan Program Studi.</p>
-
-      <h3 class="subsection">Pengesahan Pendanaan</h3>
-      <ol class="steps">
-        <li>Klik tombol <strong>"Pengesahan Pendanaan"</strong> di dashboard (ditandai dengan badge merah jika ada yang menunggu).</li>
-        <li>Tabel menampilkan proposal yang memerlukan pengesahan akhir dari Direktur.</li>
-        <li>Review detail proposal dan jumlah dana yang diajukan.</li>
-        <li>Klik <strong>"Sahkan"</strong> untuk memberikan pengesahan, atau <strong>"Tolak"</strong> jika ada masalah.</li>
-      </ol>
-
-      <h3 class="subsection">Mengatur Direktur Aktif</h3>
-      <ol class="steps">
-        <li>Di dashboard, temukan section <strong>"Pengaturan Direktur"</strong>.</li>
-        <li>Pilih nama Direktur aktif yang sedang menjabat dari dropdown.</li>
-        <li>Sistem menyimpan otomatis. Nama Direktur yang dipilih akan tercetak pada dokumen pengesahan dan tanda tangan resmi.</li>
-      </ol>
-
-      <h3 class="subsection">Filter Data & Monitoring</h3>
-      <ol class="steps">
-        <li>Gunakan filter di bagian atas dashboard untuk mempersempit data.</li>
-        <li>Filter <strong>Jenis Kegiatan</strong>: Semua / Penelitian / Pengabdian Masyarakat.</li>
-        <li>Filter <strong>Tahun Akademik</strong>: Pilih tahun tertentu.</li>
-        <li>Filter <strong>Program Studi</strong>: Pilih prodi tertentu.</li>
-        <li>Klik <strong>"Filter"</strong> untuk menerapkan, atau <strong>"Reset"</strong> untuk kembali ke tampilan semua data.</li>
-      </ol>
-    </div>
-
-    <!-- PPM -->
-    <div class="section" id="ppm">
-      <div class="section-title">
-        <div class="icon-wrap">📊</div>
-        <h2>Panduan PPM (Pusat Penjaminan Mutu)</h2>
-        <span class="badge">Peran: PPM</span>
-      </div>
-      <p>PPM bertugas memantau dan memastikan mutu kegiatan penelitian dan pengabdian masyarakat yang berjalan di AMIK Taruna.</p>
-
-      <h3 class="subsection">Dashboard PPM</h3>
-      <p>Dashboard PPM menampilkan statistik monitoring yang sama seperti Direktur — total proposal, penelitian, pengabdian, disetujui, ditolak, sedang berjalan, dan selesai.</p>
-
-      <h3 class="subsection">Filter & Monitoring</h3>
-      <ol class="steps">
-        <li>Gunakan filter Jenis Kegiatan, Tahun, dan Program Studi untuk menganalisis data.</li>
-        <li>Grafik proporsi menampilkan persentase Penelitian vs Pengabdian dan tingkat approval.</li>
-        <li>Tabel 5 Proposal Terbaru menampilkan aktivitas proposal terkini.</li>
-        <li>Klik <strong>"Lihat Semua Arsip"</strong> untuk mengakses Arsip LPPM yang lebih lengkap.</li>
-      </ol>
-    </div>
-
-    <!-- KAPRODI -->
-    <div class="section" id="kaprodi">
-      <div class="section-title">
-        <div class="icon-wrap">🎯</div>
-        <h2>Panduan Kaprodi</h2>
-        <span class="badge">Peran: Kaprodi</span>
-      </div>
-      <p>Ketua Program Studi (Kaprodi) dapat memantau kegiatan penelitian dan pengabdian masyarakat khusus dosen-dosen yang berada di bawah Program Studi yang mereka pimpin.</p>
-
-      <h3 class="subsection">Pembatasan Akses per Prodi</h3>
-      <div class="callout note">
-        <strong>📌 Penting</strong>
-        Kaprodi hanya bisa melihat data proposal dari dosen yang memiliki prodi yang sama. Kaprodi <em>Sistem Informasi</em> tidak bisa melihat data dari prodi <em>Teknologi Informasi</em>, dan sebaliknya.
-      </div>
-
-      <h3 class="subsection">Dashboard Kaprodi</h3>
-      <p>Dashboard menampilkan statistik proposal dosen di prodi yang dipimpin:</p>
-      <div class="card">
-        <p style="margin:0">
-        📋 &nbsp;<strong>Total Proposal</strong> — Dari dosen prodi sendiri<br>
-        🔬 &nbsp;<strong>Penelitian</strong> — Proposal jenis penelitian<br>
-        🤝 &nbsp;<strong>Pengabdian</strong> — Proposal jenis pengabdian masyarakat<br>
-        ✅ &nbsp;<strong>Disetujui</strong> — Yang sudah disetujui LPPM<br>
-        👤 &nbsp;<strong>Dosen Aktif</strong> — Total dosen aktif di prodi sendiri</p>
-      </div>
-
-      <h3 class="subsection">Filter Kelas (Jika Ada Beberapa Kelas)</h3>
-      <p>Jika prodi memiliki beberapa kelas (misal: Sistem Informasi A, Sistem Informasi B, Sistem Informasi C):</p>
-      <ol class="steps">
-        <li>Di dashboard, akan muncul kolom filter <strong>"Kelas"</strong> di sebelah filter Program Studi yang terkunci.</li>
-        <li>Pilih kelas tertentu (misal: Sistem Informasi A) untuk melihat data khusus kelas tersebut.</li>
-        <li>Pilih <strong>"Semua Kelas"</strong> untuk melihat data dari semua kelas di prodi Anda.</li>
-      </ol>
-
-      <div class="callout tip">
-        <strong>💡 Aturan Kelas vs Prodi Baru</strong>
-        Huruf tunggal di akhir nama prodi (A, B, C...) = <strong>Kelas</strong> dari prodi yang sama.<br>
-        Kata/frasa tambahan (Akuntansi, Bisnis...) = <strong>Prodi baru</strong> yang terpisah.<br><br>
-        Contoh: "Sistem Informasi A" = Kelas A · "Sistem Informasi Akuntansi" = Prodi baru.
-      </div>
-    </div>
-
-    <hr class="divider">
-
-    <!-- ALUR PROSES -->
-    <div class="section" id="proposal-flow">
-      <div class="section-title">
-        <div class="icon-wrap">🔄</div>
-        <h2>Alur Proses Proposal</h2>
-      </div>
-      <p>Berikut adalah alur lengkap proposal dari pengajuan hingga selesai:</p>
-
-      <h3 class="subsection">Alur Proposal Tanpa Dana PT</h3>
-      <div class="flow">
-        <div class="flow-step">📝 Dosen Mengajukan</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">🏛️ Review LPPM</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">✅ Disetujui LPPM</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">📄 Surat Tugas Terbit</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">📋 Pelaksanaan</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">📁 Laporan Akhir</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">🏁 Selesai</div>
-      </div>
-
-      <h3 class="subsection">Alur Proposal Dengan Dana PT</h3>
-      <div class="flow">
-        <div class="flow-step">📝 Dosen Mengajukan</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">🏛️ Review LPPM</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">✅ Disetujui LPPM</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">💰 Persetujuan Wadir II</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">🏅 Pengesahan Direktur</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">📄 Surat Tugas Terbit</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">🏁 Selesai</div>
-      </div>
-
-      <h3 class="subsection">Alur Revisi Proposal</h3>
-      <div class="flow">
-        <div class="flow-step">📝 Proposal Diajukan</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">🔄 LPPM: Revisi</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">✏️ Dosen Revisi</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">🏛️ Review Ulang LPPM</div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-step">✅ / ❌ Keputusan</div>
-      </div>
-    </div>
-
-    <!-- IMPORT DATA -->
-    <div class="section" id="import">
-      <div class="section-title">
-        <div class="icon-wrap">📥</div>
-        <h2>Import Data Excel</h2>
-      </div>
-      <p>Administrasi dapat mengimpor data dosen dan mahasiswa secara massal menggunakan file Excel (.xlsx / .xls).</p>
-
-      <h3 class="subsection">Import Data Dosen</h3>
-      <p>File Excel untuk import dosen menggunakan format berikut:</p>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Kolom</th><th>Deskripsi</th><th>Wajib</th></tr></thead>
-          <tbody>
-            <tr><td><strong>NUPTK</strong></td><td>Nomor Unik Pendidik dan Tenaga Kependidikan. Digunakan sebagai ID Login (NIDN). Password default: NUPTK + 123</td><td>✅ Ya</td></tr>
-            <tr><td><strong>Nama</strong></td><td>Nama lengkap dosen</td><td>✅ Ya</td></tr>
-            <tr><td><strong>No HP</strong></td><td>Nomor handphone aktif dosen</td><td>❌ Opsional</td></tr>
-            <tr><td><strong>Email</strong></td><td>Alamat email aktif dosen (digunakan untuk reset password)</td><td>❌ Opsional</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="callout warn">
-        <strong>⚠️ Perhatian Format NUPTK</strong>
-        NUPTK adalah angka 16 digit. Pastikan kolom NUPTK di Excel diformat sebagai <strong>Teks</strong> (bukan Angka) agar tidak berubah menjadi notasi ilmiah seperti 6.56E+15. Template yang diunduh dari sistem sudah otomatis memformat kolom ini sebagai Teks.
-      </div>
-
-      <h3 class="subsection">Import Data Mahasiswa</h3>
-      <p>File Excel untuk import mahasiswa menggunakan format berikut:</p>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Kolom</th><th>Deskripsi</th><th>Wajib</th></tr></thead>
-          <tbody>
-            <tr><td><strong>NIM</strong></td><td>Nomor Induk Mahasiswa. Digunakan sebagai ID Login. Password default: NIM + 123</td><td>✅ Ya</td></tr>
-            <tr><td><strong>Nama</strong></td><td>Nama lengkap mahasiswa</td><td>✅ Ya</td></tr>
-            <tr><td><strong>Email</strong></td><td>Alamat email aktif mahasiswa</td><td>❌ Opsional</td></tr>
-            <tr><td><strong>No HP</strong></td><td>Nomor handphone mahasiswa</td><td>❌ Opsional</td></tr>
-            <tr><td><strong>Prodi</strong></td><td>Program studi mahasiswa (misal: Sistem Informasi A)</td><td>✅ Ya</td></tr>
-            <tr><td><strong>Tahun Masuk</strong></td><td>Tahun masuk mahasiswa (misal: 2023)</td><td>❌ Opsional</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="callout tip">
-        <strong>💡 Tips Import</strong>
-        Selalu unduh template terbaru dari sistem sebelum mengisi data. Template sudah memiliki format kolom yang benar dan contoh data. Data yang sudah ada (NUPTK/NIM duplikat) akan dilewati otomatis oleh sistem — tidak akan terjadi data ganda.
-      </div>
-    </div>
-
-    <!-- EMAIL NOTIFIKASI -->
-    <div class="section" id="email">
-      <div class="section-title">
-        <div class="icon-wrap">📧</div>
-        <h2>Notifikasi Email</h2>
-      </div>
-      <p>SI-PEKA mengirimkan email otomatis kepada pengguna untuk beberapa kondisi berikut:</p>
-
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Jenis Email</th><th>Dikirim Kepada</th><th>Trigger</th></tr></thead>
-          <tbody>
-            <tr>
-              <td>🔑 <strong>Kode OTP Reset Password</strong></td>
-              <td>Pengguna yang lupa password</td>
-              <td>Saat pengguna klik "Lupa Password" dan memasukkan email terdaftar</td>
-            </tr>
-            <tr>
-              <td>📄 <strong>Pemberitahuan Surat Tugas</strong></td>
-              <td>Dosen/Mahasiswa pengaju proposal</td>
-              <td>Saat Administrasi menerbitkan Surat Tugas untuk proposal mereka</td>
-            </tr>
-            <tr>
-              <td>📩 <strong>Pesan Kontak LPPM</strong></td>
-              <td>Ketua LPPM</td>
-              <td>Saat ada pengunjung/tamu mengirim pesan melalui formulir kontak di halaman landing</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="callout note">
-        <strong>📌 Catatan</strong>
-        Logo LPPM AMIK Taruna akan tampil di semua email yang dikirim sistem. Pastikan email terdaftar di akun adalah email aktif agar notifikasi dapat diterima.
-      </div>
-    </div>
-
-    <!-- REFERENSI STATUS -->
-    <div class="section" id="status-ref">
-      <div class="section-title">
-        <div class="icon-wrap">🏷️</div>
-        <h2>Referensi Status Proposal</h2>
-      </div>
-      <p>Berikut adalah semua kemungkinan status yang dapat dimiliki sebuah proposal beserta artinya:</p>
-
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Status</th><th>Arti</th><th>Aksi Selanjutnya</th></tr></thead>
-          <tbody>
-            <tr>
-              <td><span class="status pending">Pending</span></td>
-              <td>Proposal baru diajukan, menunggu review LPPM</td>
-              <td>LPPM perlu mereview dan memberi keputusan</td>
-            </tr>
-            <tr>
-              <td><span class="status revisi">Revisi</span></td>
-              <td>LPPM meminta perbaikan pada proposal</td>
-              <td>Dosen/mahasiswa perlu memperbaiki dan mengirim ulang</td>
-            </tr>
-            <tr>
-              <td><span class="status disetujui">Disetujui</span></td>
-              <td>Proposal disetujui oleh LPPM</td>
-              <td>Proses keuangan (jika ada dana PT) atau Surat Tugas</td>
-            </tr>
-            <tr>
-              <td><span class="status ditolak">Ditolak</span></td>
-              <td>Proposal ditolak oleh LPPM</td>
-              <td>Tidak dapat dilanjutkan (final)</td>
-            </tr>
-            <tr>
-              <td><span class="status berjalan">Sedang Berjalan</span></td>
-              <td>Surat Tugas sudah terbit, kegiatan sedang berlangsung</td>
-              <td>Dosen mengisi logbook dan menyiapkan laporan akhir</td>
-            </tr>
-            <tr>
-              <td><span class="status selesai">Selesai</span></td>
-              <td>Laporan akhir sudah disetujui LPPM</td>
-              <td>Kegiatan selesai (final)</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h3 class="subsection">Status Keuangan</h3>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Status Keuangan</th><th>Arti</th></tr></thead>
-          <tbody>
-            <tr><td>Menunggu Wadir II</td><td>Menunggu persetujuan Wakil Direktur II</td></tr>
-            <tr><td>Disetujui Wadir II</td><td>Dana PT disetujui oleh Wadir II</td></tr>
-            <tr><td>Menunggu Direktur</td><td>Menunggu pengesahan akhir Direktur</td></tr>
-            <tr><td>Disetujui Direktur</td><td>Dana PT sudah disahkan Direktur, siap dicairkan</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- FAQ -->
-    <div class="section" id="faq">
-      <div class="section-title">
-        <div class="icon-wrap">❓</div>
-        <h2>Pertanyaan yang Sering Diajukan (FAQ)</h2>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Saya lupa password, bagaimana cara menggantinya?</div>
-        <div class="faq-a">Klik <strong>"Lupa Password?"</strong> di halaman login, masukkan email terdaftar Anda, lalu ikuti instruksi di email yang diterima. Kode OTP berlaku 15 menit. Jika email tidak ditemukan di kotak masuk, cek folder <em>Spam</em>.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Apakah saya bisa mengajukan lebih dari satu proposal dalam satu tahun?</div>
-        <div class="faq-a">Ya, sistem tidak membatasi jumlah proposal yang bisa diajukan. Namun kebijakan jumlah proposal per dosen per tahun mengikuti aturan yang ditetapkan oleh LPPM AMIK Taruna.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Saya mengajukan proposal tapi tidak bisa memilih prodi di form. Apa yang salah?</div>
-        <div class="faq-a">Dropdown Program Studi diisi berdasarkan data yang tersedia. Jika prodi Anda tidak muncul, hubungi Admin (Administrasi) untuk menambahkan prodi Anda ke sistem atau update data profil Anda.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Kenapa status proposal saya masih "Pending" setelah beberapa hari?</div>
-        <div class="faq-a">Status Pending berarti LPPM belum mereview proposal Anda. Hubungi Ketua LPPM secara langsung untuk menanyakan perkembangannya. Pastikan dokumen proposal yang Anda unggah lengkap dan tidak rusak.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Bagaimana cara mengunduh Surat Tugas yang sudah diterbitkan?</div>
-        <div class="faq-a">Buka menu <strong>"Riwayat Proposal"</strong>, cari proposal yang sudah memiliki Surat Tugas, klik tombol <strong>Detail/Lihat</strong>, lalu cari tombol <strong>"Unduh Surat Tugas"</strong> di halaman detail tersebut.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Saat import Excel, ada pesan "data dilewati". Apa artinya?</div>
-        <div class="faq-a">Artinya data tersebut sudah ada di database (NUPTK/NIM sudah terdaftar). Sistem mencegah duplikasi data secara otomatis. Data yang dilewati tidak perlu diimpor ulang.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Sebagai Kaprodi, mengapa saya tidak bisa melihat proposal dari dosen prodi lain?</div>
-        <div class="faq-a">Akses Kaprodi dibatasi hanya pada Program Studi yang mereka pimpin. Ini adalah fitur keamanan yang disengaja. Jika Anda membutuhkan akses lebih luas, hubungi Admin untuk mengubah peran akun Anda.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Perbedaan antara Kelas dan Prodi baru di sistem ini apa?</div>
-        <div class="faq-a">
-          <strong>Kelas</strong>: Prodi yang sama dengan huruf tunggal di akhir = kelas berbeda.<br>
-          Contoh: "Sistem Informasi A", "Sistem Informasi B" = satu prodi, dua kelas.<br><br>
-          <strong>Prodi baru</strong>: Nama tambahan berupa kata/frasa = program studi yang berbeda.<br>
-          Contoh: "Sistem Informasi Akuntansi" = prodi tersendiri, bukan kelas dari "Sistem Informasi".
+      <!-- GAMBARAN UMUM -->
+      <div class="section" id="overview">
+        <div class="section-title">
+          <div class="icon-wrap">🏠</div>
+          <h2>Gambaran Umum Sistem</h2>
+        </div>
+        <p>SI-PEKA (Sistem Informasi Penelitian & Pengabdian Masyarakat) adalah aplikasi berbasis web yang dikembangkan untuk memudahkan civitas akademika AMIK Taruna Probolinggo dalam mengelola seluruh kegiatan penelitian dan pengabdian masyarakat, mulai dari pengajuan proposal hingga laporan akhir.</p>
+
+        <h3 class="subsection">Fitur Utama Sistem</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Fitur</th><th>Deskripsi</th></tr></thead>
+            <tbody>
+              <tr><td>📝 Pengajuan Proposal</td><td>Dosen & mahasiswa dapat mengajukan proposal penelitian atau pengabdian masyarakat secara online.</td></tr>
+              <tr><td>✅ Validasi LPPM</td><td>LPPM mereview, menyetujui, menolak, atau meminta revisi proposal yang masuk.</td></tr>
+              <tr><td>💰 Persetujuan Dana</td><td>Wadir II mengelola persetujuan dan pencairan dana PT untuk proposal yang disetujui.</td></tr>
+              <tr><td>📄 Surat Tugas</td><td>Administrasi menerbitkan Surat Tugas resmi setelah proses keuangan selesai.</td></tr>
+              <tr><td>📊 Dashboard Monitoring</td><td>Setiap peran memiliki dashboard khusus untuk memantau statistik sesuai akses mereka.</td></tr>
+              <tr><td>📥 Import Data Excel</td><td>Admin dapat mengimpor data dosen dan mahasiswa secara massal melalui file Excel.</td></tr>
+              <tr><td>📧 Notifikasi Email</td><td>Sistem mengirim email otomatis untuk OTP reset password dan pemberitahuan Surat Tugas.</td></tr>
+              <tr><td>🌙 Dark Mode</td><td>Antarmuka mendukung mode gelap untuk kenyamanan visual.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection">Persyaratan Akses</h3>
+        <div class="card">
+          <p style="margin:0">✅ &nbsp;Browser modern: Google Chrome, Microsoft Edge, Mozilla Firefox (versi terbaru)<br>
+          ✅ &nbsp;Koneksi internet yang stabil<br>
+          ✅ &nbsp;Akun yang telah didaftarkan oleh Admin<br>
+          ✅ &nbsp;Email aktif (untuk fitur reset password OTP)</p>
         </div>
       </div>
 
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Logo LPPM tidak muncul di email yang diterima. Kenapa?</div>
-        <div class="faq-a">Logo email menggunakan metode Base64 (tertanam langsung di dalam email) sehingga tidak bergantung pada koneksi ke server. Jika logo tidak muncul, kemungkinan email client Anda memblokir gambar tertanam — aktifkan opsi "Tampilkan Gambar" di email client Anda.</div>
+      <!-- PERAN PENGGUNA -->
+      <div class="section" id="roles">
+        <div class="section-title">
+          <div class="icon-wrap">👥</div>
+          <h2>Daftar Pengguna & Peran</h2>
+        </div>
+        <p>SI-PEKA memiliki 8 peran pengguna dengan akses dan kemampuan yang berbeda-beda:</p>
+
+        <div class="role-grid">
+          <div class="role-card">
+            <div class="emoji">👨‍🏫</div>
+            <div class="role-name">Dosen</div>
+            <div class="role-desc">Mengajukan proposal penelitian & pengabdian masyarakat</div>
+            <div class="role-badge">Dosen</div>
+          </div>
+          <div class="role-card">
+            <div class="emoji">🎓</div>
+            <div class="role-name">Mahasiswa</div>
+            <div class="role-desc">Mengajukan proposal penelitian dengan bimbingan dosen</div>
+            <div class="role-badge">Mahasiswa</div>
+          </div>
+          <div class="role-card">
+            <div class="emoji">🏛️</div>
+            <div class="role-name">LPPM</div>
+            <div class="role-desc">Ketua LPPM yang mereview dan memvalidasi semua proposal</div>
+            <div class="role-badge">LPPM</div>
+          </div>
+          <div class="role-card">
+            <div class="emoji">📄</div>
+            <div class="role-name">Administrasi</div>
+            <div class="role-desc">Menerbitkan Surat Tugas dan mengelola antrian</div>
+            <div class="role-badge">Administrasi</div>
+          </div>
+          <div class="role-card">
+            <div class="emoji">💰</div>
+            <div class="role-name">Wadir II</div>
+            <div class="role-desc">Mengelola persetujuan dan pencairan dana penelitian</div>
+            <div class="role-badge">Wadir II</div>
+          </div>
+          <div class="role-card">
+            <div class="emoji">🏅</div>
+            <div class="role-name">Direktur</div>
+            <div class="role-desc">Monitoring global & pengesahan pendanaan akhir</div>
+            <div class="role-badge">Direktur</div>
+          </div>
+          <div class="role-card">
+            <div class="emoji">📊</div>
+            <div class="role-name">PPM</div>
+            <div class="role-desc">Monitoring & penjaminan mutu kegiatan penelitian</div>
+            <div class="role-badge">PPM</div>
+          </div>
+          <div class="role-card">
+            <div class="emoji">🎯</div>
+            <div class="role-name">Kaprodi</div>
+            <div class="role-desc">Monitoring proposal dosen di program studi yang dipimpin</div>
+            <div class="role-badge">Kaprodi</div>
+          </div>
+        </div>
+
+        <div class="callout note">
+          <strong>📌 Informasi</strong>
+          Akun pengguna dibuat oleh Admin (Staf Administrasi). Dosen dan mahasiswa baru tidak bisa mendaftar mandiri. Hubungi Admin jika belum memiliki akun.
+        </div>
       </div>
 
-    </div>
+      <!-- LOGIN -->
+      <div class="section" id="login">
+        <div class="section-title">
+          <div class="icon-wrap">🔐</div>
+          <h2>Login & Akses Sistem</h2>
+        </div>
 
-    <div class="card" style="text-align:center; padding:32px; background: linear-gradient(135deg, var(--green-dark) 0%, #0f2918 100%); color:#fff; border:none;">
-      <div style="font-size:40px; margin-bottom:12px;">🏛️</div>
-      <h3 style="color:#fff; font-size:18px; margin-bottom:8px;">LPPM AMIK Taruna Probolinggo</h3>
-      <p style="color:rgba(255,255,255,.7); font-size:13px; margin-bottom:0;">
-        Buku Panduan SI-PEKA — Versi 1.0 — Agustus 2025<br>
-        Untuk bantuan teknis, hubungi Tim IT atau Staf Administrasi LPPM.
-      </p>
-    </div>
+        <h3 class="subsection">Cara Login</h3>
+        <ol class="steps">
+          <li>Buka browser dan akses URL aplikasi SI-PEKA yang telah diberikan oleh Admin.</li>
+          <li>Masukkan <strong>NIDN/NIM</strong> (bukan email) pada kolom login.</li>
+          <li>Masukkan <strong>Password</strong> Anda. Password default untuk akun baru biasanya adalah <em>NUPTK + 123</em> (untuk dosen) atau <em>NIM + 123</em> (untuk mahasiswa).</li>
+          <li>Klik tombol <strong>Login</strong>. Anda akan diarahkan ke dashboard sesuai peran Anda.</li>
+        </ol>
 
-  </div><!-- /content -->
+        <div class="callout warn">
+          <strong>⚠️ Perhatian</strong>
+          Segera ganti password default setelah login pertama kali untuk keamanan akun Anda.
+        </div>
+
+        <h3 class="subsection">Reset Password via OTP</h3>
+        <ol class="steps">
+          <li>Di halaman login, klik <strong>"Lupa Password?"</strong></li>
+          <li>Masukkan <strong>email</strong> yang terdaftar pada akun Anda.</li>
+          <li>Sistem akan mengirimkan <strong>Kode OTP 6 digit</strong> ke email Anda. Kode berlaku selama <strong>15 menit</strong>.</li>
+          <li>Masukkan kode OTP yang diterima, lalu buat password baru.</li>
+        </ol>
+
+        <div class="callout tip">
+          <strong>💡 Tips</strong>
+          Jika email OTP tidak muncul di kotak masuk, periksa folder <em>Spam / Junk</em> email Anda.
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- DOSEN -->
+      <div class="section" id="dosen">
+        <div class="section-title">
+          <div class="icon-wrap">👨‍🏫</div>
+          <h2>Panduan Dosen</h2>
+          <span class="badge">Peran: Dosen</span>
+        </div>
+        <p>Dosen adalah pengguna utama yang mengajukan proposal penelitian dan pengabdian masyarakat. Setelah login, dosen akan melihat dashboard pribadi berisi statistik dan riwayat proposal mereka.</p>
+
+        <h3 class="subsection">Dashboard Dosen</h3>
+        <p>Dashboard menampilkan ringkasan statistik proposal Anda:</p>
+        <div class="card">
+          <p style="margin:0">📋 &nbsp;<strong>Total Proposal</strong> — Jumlah semua proposal yang pernah diajukan<br>
+          ✅ &nbsp;<strong>Disetujui</strong> — Proposal yang telah disetujui LPPM<br>
+          🕐 &nbsp;<strong>Sedang Direview</strong> — Proposal yang masih menunggu keputusan<br>
+          📁 &nbsp;<strong>Laporan Akhir</strong> — Jumlah laporan akhir yang telah diunggah</p>
+        </div>
+
+        <h3 class="subsection">Mengajukan Proposal Baru</h3>
+        <ol class="steps">
+          <li>Di sidebar kiri, klik menu <strong>"Ajukan Proposal"</strong> atau <strong>"Proposal Baru"</strong>.</li>
+          <li>Pilih <strong>Jenis Kegiatan</strong>: <em>Penelitian</em> atau <em>Pengabdian Masyarakat</em>.</li>
+          <li>Isi semua kolom wajib: <strong>Judul</strong>, <strong>Tahun</strong>, deskripsi singkat, dan data pendukung lainnya.</li>
+          <li>Jika kegiatan memiliki pendanaan dari PT, isi kolom <strong>Dana PT</strong>. Jika tidak ada, kosongkan atau isi 0.</li>
+          <li>Unggah <strong>file proposal</strong> dalam format PDF.</li>
+          <li>Jika ada <strong>Surat MOU</strong> dengan mitra, unggah file MOU-nya.</li>
+          <li>Klik <strong>"Kirim Proposal"</strong> untuk mengirim ke LPPM.</li>
+        </ol>
+
+        <div class="callout tip">
+          <strong>💡 Tips</strong>
+          Pastikan judul proposal jelas dan deskriptif. Proposal dengan judul yang spesifik lebih mudah diproses oleh LPPM.
+        </div>
+
+        <h3 class="subsection">Melihat Status Proposal</h3>
+        <ol class="steps">
+          <li>Klik menu <strong>"Riwayat Proposal"</strong> di sidebar.</li>
+          <li>Tabel akan menampilkan semua proposal beserta status terkini.</li>
+          <li>Klik ikon 👁️ <strong>Detail</strong> untuk melihat rincian dan catatan revisi dari LPPM.</li>
+        </ol>
+
+        <h3 class="subsection">Mengunggah Revisi Proposal</h3>
+        <ol class="steps">
+          <li>Jika status proposal adalah <span class="status revisi">Revisi</span>, buka halaman Detail proposal.</li>
+          <li>Baca catatan revisi yang diberikan oleh LPPM.</li>
+          <li>Perbaiki dokumen proposal sesuai catatan, lalu unggah file yang sudah direvisi.</li>
+          <li>Klik <strong>"Kirim Revisi"</strong> untuk mengirim ulang ke LPPM.</li>
+        </ol>
+
+        <h3 class="subsection">Mengunggah Laporan Akhir</h3>
+        <ol class="steps">
+          <li>Setelah kegiatan selesai dan Surat Tugas diterbitkan, buka halaman Detail proposal.</li>
+          <li>Isi <strong>Logbook/Catatan Harian</strong> kegiatan secara rutin selama pelaksanaan.</li>
+          <li>Unggah file <strong>Laporan Akhir</strong> dalam format PDF.</li>
+          <li>Klik tombol simpan. Status proposal akan berubah menunggu persetujuan laporan.</li>
+        </ol>
+      </div>
+
+      <!-- MAHASISWA -->
+      <div class="section" id="mahasiswa">
+        <div class="section-title">
+          <div class="icon-wrap">🎓</div>
+          <h2>Panduan Mahasiswa</h2>
+          <span class="badge">Peran: Mahasiswa</span>
+        </div>
+        <p>Mahasiswa dapat mengajukan proposal penelitian melalui SI-PEKA. Prosesnya hampir sama dengan dosen, namun mahasiswa umumnya bekerja di bawah bimbingan dosen pembimbing.</p>
+
+        <h3 class="subsection">Mengajukan Proposal</h3>
+        <ol class="steps">
+          <li>Setelah login, klik <strong>"Ajukan Proposal"</strong> di sidebar.</li>
+          <li>Isi formulir proposal dengan lengkap termasuk judul, jenis, dan tahun pelaksanaan.</li>
+          <li>Unggah file proposal PDF.</li>
+          <li>Klik <strong>"Kirim"</strong> untuk mengirimkan ke LPPM.</li>
+        </ol>
+
+        <div class="callout note">
+          <strong>📌 Catatan</strong>
+          Mahasiswa yang belum memiliki akun perlu menghubungi Administrasi untuk didaftarkan ke sistem. Data mahasiswa juga bisa diimpor secara massal oleh Admin menggunakan file Excel.
+        </div>
+      </div>
+
+      <!-- LPPM -->
+      <div class="section" id="lppm">
+        <div class="section-title">
+          <div class="icon-wrap">🏛️</div>
+          <h2>Panduan LPPM (Ketua LPPM)</h2>
+          <span class="badge">Peran: LPPM</span>
+        </div>
+        <p>Peran LPPM adalah sebagai validator utama seluruh proposal yang masuk. LPPM memiliki akses penuh untuk menyetujui, menolak, atau meminta revisi proposal.</p>
+
+        <h3 class="subsection">Validasi Proposal</h3>
+        <ol class="steps">
+          <li>Klik menu <strong>"Validasi Proposal"</strong> di sidebar.</li>
+          <li>Tabel menampilkan semua proposal yang masuk. Klik ikon 👁️ untuk melihat detail.</li>
+          <li>Baca dan periksa dokumen proposal yang diunggah oleh dosen/mahasiswa.</li>
+          <li>Pilih aksi yang sesuai:
+            <br>— <strong>✅ Setujui</strong>: Proposal layak dilanjutkan ke proses berikutnya.
+            <br>— <strong>🔄 Revisi</strong>: Minta perbaikan. Tulis catatan revisi yang jelas.
+            <br>— <strong>❌ Tolak</strong>: Proposal tidak dapat dilanjutkan.</li>
+        </ol>
+
+        <div class="callout tip">
+          <strong>💡 Tips LPPM</strong>
+          Saat meminta revisi, tuliskan catatan yang spesifik dan detail agar dosen/mahasiswa dapat memperbaiki proposal dengan tepat sasaran.
+        </div>
+      </div>
+
+      <!-- ADMINISTRASI -->
+      <div class="section" id="administrasi">
+        <div class="section-title">
+          <div class="icon-wrap">📄</div>
+          <h2>Panduan Administrasi</h2>
+          <span class="badge">Peran: Administrasi</span>
+        </div>
+        <p>Staf Administrasi bertugas menerbitkan Surat Tugas resmi untuk kegiatan yang telah mendapatkan persetujuan, mengelola data pengguna (dosen & mahasiswa), dan mengelola berita.</p>
+
+        <h3 class="subsection">Antrian Surat Tugas</h3>
+        <ol class="steps">
+          <li>Di sidebar, klik <strong>"Antrean Surat Tugas"</strong>.</li>
+          <li>Daftar menampilkan proposal yang sudah siap dibuatkan Surat Tugas.</li>
+          <li>Klik ikon ✏️ <strong>Edit/Proses</strong> pada proposal yang ingin dibuatkan surat.</li>
+          <li>Isi <strong>Nomor Surat Tugas</strong> dan <strong>Tanggal Pelaksanaan</strong> kegiatan.</li>
+          <li>Klik <strong>"Simpan"</strong>. Sistem akan otomatis mengirim email notifikasi.</li>
+        </ol>
+      </div>
+
+      <!-- WADIR II -->
+      <div class="section" id="wadir">
+        <div class="section-title">
+          <div class="icon-wrap">💰</div>
+          <h2>Panduan Wadir II (Keuangan)</h2>
+          <span class="badge">Peran: Wadir II</span>
+        </div>
+        <p>Wakil Direktur II bertanggung jawab atas persetujuan dan pencairan dana PT (Perguruan Tinggi) untuk proposal yang memerlukan pendanaan dari institusi.</p>
+
+        <h3 class="subsection">Persetujuan & Pencairan Dana</h3>
+        <ol class="steps">
+          <li>Di sidebar, klik menu keuangan yang tersedia.</li>
+          <li>Tabel menampilkan proposal yang sudah disetujui LPPM dan memiliki Dana PT > 0.</li>
+          <li>Klik detail proposal untuk melihat rincian dana yang diajukan.</li>
+          <li>Klik <strong>"Setujui Pencairan"</strong> untuk memproses pencairan dana.</li>
+        </ol>
+
+        <div class="callout warn">
+          <strong>⚠️ Penting</strong>
+          Proposal tanpa Dana PT (Dana PT = 0) tidak perlu melalui proses persetujuan Wadir II.
+        </div>
+      </div>
+
+      <!-- DIREKTUR -->
+      <div class="section" id="direktur">
+        <div class="section-title">
+          <div class="icon-wrap">🏅</div>
+          <h2>Panduan Direktur</h2>
+          <span class="badge">Peran: Direktur</span>
+        </div>
+        <p>Direktur memiliki akses monitoring tertinggi terhadap seluruh kegiatan, serta mengesahkan pendanaan dari institusi.</p>
+
+        <h3 class="subsection">Pengesahan Pendanaan</h3>
+        <ol class="steps">
+          <li>Klik tombol <strong>"Pengesahan Pendanaan"</strong> di dashboard.</li>
+          <li>Review detail proposal dan jumlah dana yang diajukan.</li>
+          <li>Klik <strong>"Sahkan"</strong> untuk memberikan pengesahan, atau <strong>"Tolak"</strong> jika ada masalah.</li>
+        </ol>
+      </div>
+
+      <!-- PPM -->
+      <div class="section" id="ppm">
+        <div class="section-title">
+          <div class="icon-wrap">📊</div>
+          <h2>Panduan PPM (Penjaminan Mutu)</h2>
+          <span class="badge">Peran: PPM</span>
+        </div>
+        <p>PPM bertugas memantau dan memastikan mutu kegiatan penelitian dan pengabdian masyarakat yang berjalan secara keseluruhan.</p>
+        <p>Akses utama PPM adalah melalui Dashboard Monitoring dan Arsip LPPM yang memungkinkan filter berdasarkan prodi, tahun, dan jenis kegiatan.</p>
+      </div>
+
+      <!-- KAPRODI -->
+      <div class="section" id="kaprodi">
+        <div class="section-title">
+          <div class="icon-wrap">🎯</div>
+          <h2>Panduan Kaprodi</h2>
+          <span class="badge">Peran: Kaprodi</span>
+        </div>
+        <p>Ketua Program Studi (Kaprodi) dapat memantau kegiatan khusus dosen-dosen yang berada di bawah Program Studi yang mereka pimpin.</p>
+
+        <h3 class="subsection">Pembatasan Akses per Prodi</h3>
+        <div class="callout note">
+          <strong>📌 Penting</strong>
+          Kaprodi hanya bisa melihat data proposal dari dosen yang memiliki prodi yang sama. Kaprodi <em>Sistem Informasi</em> tidak bisa melihat data dari prodi <em>Teknologi Informasi</em>.
+        </div>
+
+        <h3 class="subsection">Filter Kelas (Jika Ada Beberapa Kelas)</h3>
+        <p>Jika prodi memiliki beberapa kelas (misal: Sistem Informasi A, Sistem Informasi B):</p>
+        <ol class="steps">
+          <li>Di dashboard, akan muncul kolom filter <strong>"Kelas"</strong> di sebelah filter Program Studi yang terkunci.</li>
+          <li>Pilih kelas tertentu untuk melihat data khusus kelas tersebut.</li>
+          <li>Pilih <strong>"Semua Kelas"</strong> untuk melihat data dari semua kelas di prodi Anda.</li>
+        </ol>
+
+        <div class="callout tip">
+          <strong>💡 Aturan Kelas vs Prodi Baru</strong>
+          Huruf tunggal di akhir nama prodi (A, B, C...) = <strong>Kelas</strong> dari prodi yang sama.<br>
+          Kata/frasa tambahan (Akuntansi, Bisnis...) = <strong>Prodi baru</strong> yang terpisah.
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- ALUR PROSES -->
+      <div class="section" id="proposal-flow">
+        <div class="section-title">
+          <div class="icon-wrap">🔄</div>
+          <h2>Alur Proses Proposal</h2>
+        </div>
+        
+        <h3 class="subsection">Alur Proposal Tanpa Dana PT</h3>
+        <div class="flow">
+          <div class="flow-step">📝 Dosen Mengajukan</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">🏛️ Review LPPM</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">✅ Disetujui LPPM</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">📄 Surat Tugas Terbit</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">📋 Pelaksanaan</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">🏁 Selesai</div>
+        </div>
+
+        <h3 class="subsection">Alur Proposal Dengan Dana PT</h3>
+        <div class="flow">
+          <div class="flow-step">📝 Dosen Mengajukan</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">🏛️ Review LPPM</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">💰 Persetujuan Wadir II</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">🏅 Pengesahan Direktur</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">📄 Surat Tugas</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">🏁 Selesai</div>
+        </div>
+      </div>
+
+      <!-- IMPORT DATA -->
+      <div class="section" id="import">
+        <div class="section-title">
+          <div class="icon-wrap">📥</div>
+          <h2>Import Data Excel</h2>
+        </div>
+        <p>Administrasi dapat mengimpor data pengguna massal menggunakan file Excel (.xlsx). Unduh template dari sistem untuk format yang benar.</p>
+
+        <h3 class="subsection">Import Data Dosen</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Kolom</th><th>Deskripsi</th><th>Wajib</th></tr></thead>
+            <tbody>
+              <tr><td><strong>NUPTK</strong></td><td>ID Login (NIDN). Format Teks. Pass: NUPTK+123</td><td>✅ Ya</td></tr>
+              <tr><td><strong>Nama</strong></td><td>Nama lengkap dosen</td><td>✅ Ya</td></tr>
+              <tr><td><strong>No HP</strong></td><td>Nomor handphone aktif dosen</td><td>❌ Opt</td></tr>
+              <tr><td><strong>Email</strong></td><td>Alamat email untuk reset password</td><td>❌ Opt</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subsection">Import Data Mahasiswa</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Kolom</th><th>Deskripsi</th><th>Wajib</th></tr></thead>
+            <tbody>
+              <tr><td><strong>NIM</strong></td><td>ID Login. Pass: NIM+123</td><td>✅ Ya</td></tr>
+              <tr><td><strong>Nama</strong></td><td>Nama lengkap mahasiswa</td><td>✅ Ya</td></tr>
+              <tr><td><strong>Email</strong></td><td>Alamat email mahasiswa</td><td>❌ Opt</td></tr>
+              <tr><td><strong>No HP</strong></td><td>Nomor handphone mahasiswa</td><td>❌ Opt</td></tr>
+              <tr><td><strong>Prodi</strong></td><td>Program studi (misal: Sistem Informasi A)</td><td>✅ Ya</td></tr>
+              <tr><td><strong>Tahun Masuk</strong></td><td>Tahun masuk mahasiswa</td><td>❌ Opt</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- EMAIL NOTIFIKASI -->
+      <div class="section" id="email">
+        <div class="section-title">
+          <div class="icon-wrap">📧</div>
+          <h2>Notifikasi Email</h2>
+        </div>
+        
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Jenis Email</th><th>Dikirim Kepada</th><th>Trigger</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>🔑 <strong>Kode OTP Reset Password</strong></td>
+                <td>Pengguna lupa password</td>
+                <td>Saat request reset password</td>
+              </tr>
+              <tr>
+                <td>📄 <strong>Surat Tugas Terbit</strong></td>
+                <td>Dosen/Mahasiswa</td>
+                <td>Saat Administrasi menerbitkan Surat Tugas</td>
+              </tr>
+              <tr>
+                <td>📩 <strong>Pesan Kontak Baru</strong></td>
+                <td>Ketua LPPM</td>
+                <td>Saat form kontak web diisi</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- REFERENSI STATUS -->
+      <div class="section" id="status-ref">
+        <div class="section-title">
+          <div class="icon-wrap">🏷️</div>
+          <h2>Referensi Status Proposal</h2>
+        </div>
+        
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Status</th><th>Arti</th></tr></thead>
+            <tbody>
+              <tr><td><span class="status pending">Pending</span></td><td>Baru diajukan, menunggu review LPPM</td></tr>
+              <tr><td><span class="status revisi">Revisi</span></td><td>LPPM meminta perbaikan proposal</td></tr>
+              <tr><td><span class="status disetujui">Disetujui</span></td><td>Disetujui LPPM, lanjut ke tahap berikutnya</td></tr>
+              <tr><td><span class="status ditolak">Ditolak</span></td><td>Proposal ditolak permanen</td></tr>
+              <tr><td><span class="status berjalan">Sedang Berjalan</span></td><td>Surat Tugas terbit, kegiatan berlangsung</td></tr>
+              <tr><td><span class="status selesai">Selesai</span></td><td>Kegiatan selesai dan laporan diterima</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="section" id="faq">
+        <div class="section-title">
+          <div class="icon-wrap">❓</div>
+          <h2>FAQ</h2>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">Saya lupa password, bagaimana cara menggantinya?</div>
+          <div class="faq-a">Klik <strong>"Lupa Password?"</strong> di halaman login, masukkan email terdaftar. Cek email Anda untuk 6 digit kode OTP (berlaku 15 menit).</div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">Saya mengajukan proposal tapi prodi saya tidak ada di form.</div>
+          <div class="faq-a">Dropdown Prodi terisi berdasarkan data pengguna yang terdaftar. Hubungi Admin untuk menambahkan prodi baru di data master atau update profil Anda.</div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">Perbedaan antara Kelas dan Prodi baru di sistem ini?</div>
+          <div class="faq-a">
+            <strong>Kelas</strong>: Nama prodi + 1 Huruf (Contoh: "Sistem Informasi A").<br>
+            <strong>Prodi baru</strong>: Nama prodi + Kata (Contoh: "Sistem Informasi Akuntansi").
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">Logo LPPM tidak muncul di email yang diterima.</div>
+          <div class="faq-a">Sistem menggunakan metode Base64 (gambar tertanam langsung di kode email). Pastikan email client Anda (Gmail/Outlook) diizinkan untuk "Tampilkan Gambar" / "Load Images".</div>
+        </div>
+      </div>
+
+      <div class="footer-card">
+        <div class="icon">🏛️</div>
+        <h3>LPPM AMIK Taruna Probolinggo</h3>
+        <p>Buku Panduan SI-PEKA — Versi 1.0 — Agustus 2025<br>Untuk bantuan teknis, hubungi Tim IT atau Staf Administrasi LPPM.</p>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /content-wrapper -->
 </div><!-- /main -->
 
 <script>
-  // Dark mode
+  // Dark mode toggle
   function toggleDark() {
     document.body.classList.toggle('dark');
     localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
   }
   if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
 
-  // Sidebar mobile
+  // Sidebar mobile toggle
   function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('open');
     document.getElementById('overlay').classList.toggle('open');
@@ -1314,20 +1215,48 @@
   // Active nav link on scroll
   const sections = document.querySelectorAll('.section, .cover');
   const navLinks = document.querySelectorAll('.nav-link');
-  window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(s => {
-      if (window.scrollY >= s.offsetTop - 100) current = s.id;
-    });
-    navLinks.forEach(l => {
-      l.classList.remove('active');
-      if (l.getAttribute('href') === '#' + current) l.classList.add('active');
-    });
-  });
+  
+  // Throttle function for performance
+  function throttle(callee, timeout) {
+    let timer = null;
+    return function perform(...args) {
+      if (timer) return;
+      timer = setTimeout(() => { callee(...args); clearTimeout(timer); timer = null; }, timeout);
+    }
+  }
 
-  // FAQ toggle
+  const handleScroll = throttle(() => {
+    let current = '';
+    // Add offset to detect sections earlier
+    const scrollPosition = window.scrollY + 120; 
+    
+    sections.forEach(s => {
+      if (s.offsetTop <= scrollPosition) {
+        current = s.id;
+      }
+    });
+    
+    if (current) {
+      navLinks.forEach(l => {
+        l.classList.remove('active');
+        if (l.getAttribute('href') === '#' + current) {
+          l.classList.add('active');
+        }
+      });
+    }
+  }, 100);
+
+  window.addEventListener('scroll', handleScroll);
+
+  // FAQ accordion toggle
   function toggleFaq(el) {
-    el.parentElement.classList.toggle('open');
+    const parent = el.parentElement;
+    // Close other FAQs
+    document.querySelectorAll('.faq-item').forEach(item => {
+      if (item !== parent) item.classList.remove('open');
+    });
+    // Toggle clicked FAQ
+    parent.classList.toggle('open');
   }
 </script>
 </body>
